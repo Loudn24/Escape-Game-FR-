@@ -2,146 +2,25 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Session récupérée</title>
-
-  <style>
-    body {
-      margin: 0;
-      background: black;
-      color: #e6e6e6;
-      font-family: monospace;
-    }
-
-    #start {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #start button {
-      background: black;
-      color: #e6e6e6;
-      border: 1px solid #444;
-      padding: 15px 30px;
-      font-family: monospace;
-      font-size: 1.2em;
-      cursor: pointer;
-    }
-
-    #screen {
-      padding: 30px;
-      max-width: 900px;
-      display: none;
-    }
-
-    #command {
-      margin-top: 20px;
-      width: 100%;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #444;
-      color: #e6e6e6;
-      font-size: 1em;
-      outline: none;
-    }
-  </style>
+  <title>Test audio simple</title>
 </head>
-
 <body>
 
-  <!-- Écran de démarrage -->
-  <div id="start">
-    <button id="startBtn">DÉMARRER LA SESSION</button>
-  </div>
+<button id="btn">CLIQUER POUR JOUER LE SON</button>
 
-  <!-- Terminal -->
-  <div id="screen">
-    <div id="text"></div>
-    <input id="command" type="text" placeholder=">" autofocus />
-  </div>
+<audio id="audio" controls>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
-  <!-- Sons -->
-  <audio id="ambiance" loop>
-    <!-- Drone sombre, FIABLE -->
-    <source src="https://cdn.pixabay.com/audio/2022/10/31/audio_1c3b7a0a72.mp3" type="audio/mpeg">
-  </audio>
+<script>
+  const btn = document.getElementById("btn");
+  const audio = document.getElementById("audio");
 
-  <audio id="typeSound">
-    <!-- Son de frappe -->
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_3f8c4c8d88.mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
-    const startBtn = document.getElementById("startBtn");
-    const startScreen = document.getElementById("start");
-    const screen = document.getElementById("screen");
-    const text = document.getElementById("text");
-    const input = document.getElementById("command");
-
-    const ambiance = document.getElementById("ambiance");
-    const typeSound = document.getElementById("typeSound");
-
-    const intro =
-      "Connexion établie...\n" +
-      "Récupération de la session...\n\n" +
-      "Dernière activité détectée : 03:17\n" +
-      "Utilisateur non déconnecté.\n\n" +
-      ">";
-
-    let index = 0;
-
-    function typeWriter() {
-      if (index < intro.length) {
-        const char = intro[index];
-        text.innerHTML += char === "\n" ? "<br>" : char;
-
-        typeSound.currentTime = 0;
-        typeSound.volume = 0.4;
-        typeSound.play().catch(() => {});
-
-        index++;
-        setTimeout(typeWriter, 45);
-      }
-    }
-
-    startBtn.addEventListener("click", () => {
-      // Autorisation audio
-      ambiance.volume = 0.2;
-      ambiance.play().catch(() => {});
-
-      startScreen.style.display = "none";
-      screen.style.display = "block";
-
-      typeWriter();
-    });
-
-    // Réactions simples aux commandes
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const value = input.value.toLowerCase().trim();
-        input.value = "";
-
-        text.innerHTML += "<br>> " + value;
-
-        if (value === "help") {
-          text.innerHTML += "<br>Commandes disponibles : help, logs, exit";
-        }
-        else if (value === "logs") {
-          text.innerHTML += "<br>[03:17] — quelqu’un a fermé la porte.";
-        }
-        else if (value === "exit") {
-          text.innerHTML += "<br>Impossible de fermer la session.";
-          ambiance.pause();
-        }
-        else {
-          text.innerHTML += "<br>Commande inconnue.";
-        }
-
-        window.scrollTo(0, document.body.scrollHeight);
-      }
-    });
-  </script>
+  btn.addEventListener("click", () => {
+    audio.volume = 0.5;
+    audio.play();
+  });
+</script>
 
 </body>
 </html>
