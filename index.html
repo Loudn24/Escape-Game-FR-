@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Terminal</title>
+  <title>Session</title>
 
   <style>
     body {
@@ -15,14 +15,16 @@
 
     #text {
       white-space: pre-wrap;
+      font-size: 16px;
     }
 
     button {
       background: black;
       color: #e6e6e6;
       border: 1px solid #444;
-      padding: 10px 20px;
+      padding: 12px 25px;
       font-family: monospace;
+      font-size: 16px;
       cursor: pointer;
       margin-bottom: 20px;
     }
@@ -31,47 +33,66 @@
 
 <body>
 
-<button id="start">DÉMARRER</button>
+<button id="start">DÉMARRER LA SESSION</button>
 <div id="text"></div>
 
+<!-- AMBIANCE HORREUR -->
 <audio id="ambiance" loop>
   <source src="https://cdn.pixabay.com/audio/2022/10/31/audio_1c3b7a0a72.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="key">
+<!-- SON DE CLAVIER (double pour éviter blocage navigateur) -->
+<audio id="key1">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_3f8c4c8d88.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="key2">
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_3f8c4c8d88.mp3" type="audio/mpeg">
 </audio>
 
 <script>
   const startBtn = document.getElementById("start");
   const text = document.getElementById("text");
-  const ambiance = document.getElementById("ambiance");
-  const key = document.getElementById("key");
 
-  const message = "Connexion établie...\nRécupération de la session...\n\n>";
+  const ambiance = document.getElementById("ambiance");
+  const key1 = document.getElementById("key1");
+  const key2 = document.getElementById("key2");
+
+  const message =
+    "Connexion établie...\n" +
+    "Récupération de la session...\n\n" +
+    "Dernière activité détectée : 03:17\n" +
+    "Utilisateur non déconnecté.\n\n" +
+    "> ";
+
   let i = 0;
+  let toggle = false;
 
   startBtn.addEventListener("click", () => {
-    ambiance.volume = 0.2;
-    ambiance.play();
+    ambiance.volume = 0.15;
+    ambiance.play().catch(() => {});
 
     startBtn.remove();
-    type();
+    typeWriter();
   });
 
-  function type() {
+  function typeWriter() {
     if (i < message.length) {
       text.textContent += message[i];
 
-      key.currentTime = 0;
-      key.volume = 0.5;
-      key.play().catch(() => {});
+      const sound = toggle ? key1 : key2;
+      toggle = !toggle;
+
+      sound.currentTime = 0;
+      sound.volume = 0.4;
+      sound.play().catch(() => {});
 
       i++;
-      setTimeout(type, 60);
+      setTimeout(typeWriter, 55);
     }
   }
 </script>
 
 </body>
 </html>
+
