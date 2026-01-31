@@ -2,24 +2,75 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Test audio simple</title>
+  <title>Terminal</title>
+
+  <style>
+    body {
+      background: black;
+      color: #e6e6e6;
+      font-family: monospace;
+      margin: 0;
+      padding: 30px;
+    }
+
+    #text {
+      white-space: pre-wrap;
+    }
+
+    button {
+      background: black;
+      color: #e6e6e6;
+      border: 1px solid #444;
+      padding: 10px 20px;
+      font-family: monospace;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
+
 <body>
 
-<button id="btn">CLIQUER POUR JOUER LE SON</button>
+<button id="start">DÉMARRER</button>
+<div id="text"></div>
 
-<audio id="audio" controls>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+<audio id="ambiance" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/10/31/audio_1c3b7a0a72.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="key">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_3f8c4c8d88.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-  const btn = document.getElementById("btn");
-  const audio = document.getElementById("audio");
+  const startBtn = document.getElementById("start");
+  const text = document.getElementById("text");
+  const ambiance = document.getElementById("ambiance");
+  const key = document.getElementById("key");
 
-  btn.addEventListener("click", () => {
-    audio.volume = 0.5;
-    audio.play();
+  const message = "Connexion établie...\nRécupération de la session...\n\n>";
+  let i = 0;
+
+  startBtn.addEventListener("click", () => {
+    ambiance.volume = 0.2;
+    ambiance.play();
+
+    startBtn.remove();
+    type();
   });
+
+  function type() {
+    if (i < message.length) {
+      text.textContent += message[i];
+
+      key.currentTime = 0;
+      key.volume = 0.5;
+      key.play().catch(() => {});
+
+      i++;
+      setTimeout(type, 60);
+    }
+  }
 </script>
 
 </body>
